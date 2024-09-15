@@ -5,9 +5,6 @@ plugins {
     kotlin("jvm") version "1.9.23"
 }
 
-group = "honey.bot.api"
-version = "1.0.0"
-
 repositories {
     mavenCentral()
 }
