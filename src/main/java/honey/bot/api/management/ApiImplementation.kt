@@ -88,12 +88,14 @@ internal class ParamExtractor(
     fun getParameters(): List<QueryEntity> {
         if (args == null) return emptyList()
 
-        return args
-            .filterNotNull()
-            .flatMapIndexed { index, arg ->
-            val paramName = findParamName(index)
-            findParamValues(arg).map { value ->
-                QueryEntity(gson, paramName, value)
+        return args.flatMapIndexed { index, arg ->
+            if (arg != null) {
+                val paramName = findParamName(index)
+                findParamValues(arg).map { value ->
+                    QueryEntity(gson, paramName, value)
+                }
+            } else {
+                emptyList()
             }
         }
     }

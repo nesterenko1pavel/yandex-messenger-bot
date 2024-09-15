@@ -70,6 +70,7 @@ public class BotController(
         updateListeners.add(listener)
     }
 
+    // TODO: add exception handling
     fun sendText(
         text: String,
         login: String? = null,
