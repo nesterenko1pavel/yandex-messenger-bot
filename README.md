@@ -2,6 +2,9 @@
 
 [![](https://jitpack.io/v/nesterenko1pavel/yandex-messenger-bot.svg)](https://jitpack.io/#nesterenko1pavel/yandex-messenger-bot)
 
+### A few words
+Hi! It's indie project for supporting Yandex Messenger API in kotlin. Glad to see you in my pet project. Hope this library will save your time and make your activity in messenger more convenient
+
 ### Implementation
 
 ```kotlin
