@@ -5,9 +5,9 @@ import honey.bot.api.network.annotations.Get
 import honey.bot.api.network.annotations.Param
 import honey.bot.api.network.annotations.Post
 import honey.bot.api.network.services.ApiService
-import okhttp3.*
 import okhttp3.HttpUrl.Companion.toHttpUrl
-import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.MultipartBody
+import okhttp3.Request
 import okhttp3.RequestBody.Companion.toRequestBody
 import java.io.File
 import java.lang.reflect.Array.get
@@ -65,8 +65,7 @@ internal class ApiImplementation(
         val builder = MultipartBody.Builder().setType(MultipartBody.FORM)
         queries.forEach { query ->
             if (query.value is File) {
-                val mediaType = "application/json".toMediaTypeOrNull()
-                val requestBody = Files.readAllBytes(query.value.toPath()).toRequestBody(mediaType)
+                val requestBody = Files.readAllBytes(query.value.toPath()).toRequestBody(null)
                 builder.addFormDataPart(query.key, query.value.name, requestBody)
             } else {
                 builder.addFormDataPart(query.key, query.value.toString())

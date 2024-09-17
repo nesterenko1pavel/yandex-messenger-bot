@@ -6,11 +6,12 @@ import honey.bot.api.management.ApiImplementation
 import honey.bot.api.management.FibonacciFetcher
 import honey.bot.api.management.RequestExecutor
 import honey.bot.api.network.models.KeyboardButtonDto
-import honey.bot.api.network.models.SendTextResponse
+import honey.bot.api.network.models.SendMessageResponse
 import honey.bot.api.network.models.UpdateDto
 import honey.bot.api.network.services.MessagesService
 import honey.bot.api.network.services.PollingService
 import okhttp3.OkHttpClient
+import java.io.File
 import java.util.concurrent.ConcurrentLinkedQueue
 import java.util.concurrent.TimeUnit
 import java.util.concurrent.atomic.AtomicBoolean
@@ -18,7 +19,7 @@ import java.util.concurrent.atomic.AtomicBoolean
 private const val BASE_URL = "https://botapi.messenger.yandex.net/bot/v1/"
 private const val READ_DEFAULT_TIMEOUT = 30L
 
-public class BotController(
+class BotController(
     token: String,
     gson: Gson = GsonBuilder().create(),
     httpClient: OkHttpClient = OkHttpClient.Builder().readTimeout(READ_DEFAULT_TIMEOUT, TimeUnit.SECONDS).build(),
@@ -82,7 +83,7 @@ public class BotController(
         disableWebPagePreview: Boolean? = null,
         threadId: Long? = null,
         inlineKeyboard: List<KeyboardButtonDto>? = null,
-    ): SendTextResponse {
+    ): SendMessageResponse {
         return messagesService.sendText(
             text,
             login,
@@ -95,6 +96,15 @@ public class BotController(
             threadId,
             inlineKeyboard
         )
+    }
+
+    fun sendFile(
+        login: String? = null,
+        chatId: String? = null,
+        document: File,
+        threadId: Long? = null,
+    ): SendMessageResponse {
+        return messagesService.sendFile(login, chatId, document, threadId)
     }
 }
 

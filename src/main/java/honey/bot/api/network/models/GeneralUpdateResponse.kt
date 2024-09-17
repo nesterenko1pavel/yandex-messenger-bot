@@ -6,7 +6,7 @@ data class GeneralUpdateResponse(
     val updates: List<UpdateDto>,
 )
 
-data class SendTextResponse(
+data class SendMessageResponse(
     val ok: Boolean,
     @SerializedName("message_id")
     val messageId: Long,

@@ -3,7 +3,8 @@ package honey.bot.api.network.services
 import honey.bot.api.network.annotations.Param
 import honey.bot.api.network.annotations.Post
 import honey.bot.api.network.models.KeyboardButtonDto
-import honey.bot.api.network.models.SendTextResponse
+import honey.bot.api.network.models.SendMessageResponse
+import java.io.File
 
 internal interface MessagesService : ApiService {
 
@@ -19,5 +20,13 @@ internal interface MessagesService : ApiService {
         @Param("disable_web_page_preview") disableWebPagePreview: Boolean?,
         @Param("thread_id") threadId: Long?,
         @Param("inline_keyboard") inlineKeyboard: List<KeyboardButtonDto>?,
-    ): SendTextResponse
+    ): SendMessageResponse
+
+    @Post("messages/sendFile/")
+    fun sendFile(
+        @Param("login") login: String?,
+        @Param("chat_id") chatId: String?,
+        @Param("document") document: File,
+        @Param("thread_id") threadId: Long?,
+    ): SendMessageResponse
 }
