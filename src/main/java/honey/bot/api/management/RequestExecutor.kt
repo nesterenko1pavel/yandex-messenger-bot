@@ -14,10 +14,13 @@ internal class RequestExecutor(
         request: Request,
         returnType: Class<T>,
     ): T {
-        // TODO: try to move to enqueue if possible
-        val response = httpClient.newCall(request).execute()
-        if (!response.isSuccessful) throw IOException("HTTP Error ${response.code}")
-        val body = response.body ?: throw IllegalStateException("ResponseBody is null")
-        return gson.fromJson(body.string(), returnType)
+        httpClient.newCall(request)
+            .execute()
+            .use { response ->
+                val body = response.body ?: throw IllegalStateException("ResponseBody is null")
+                val bodyString = body.string()
+                if (!response.isSuccessful) throw IOException("HTTP Error ${response.code} $bodyString}")
+                return gson.fromJson(bodyString, returnType)
+            }
     }
 }

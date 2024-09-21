@@ -1,12 +1,13 @@
 package honey.bot.api.network.services
 
+import honey.bot.api.network.annotations.Multipart
 import honey.bot.api.network.annotations.Param
 import honey.bot.api.network.annotations.Post
-import honey.bot.api.network.models.KeyboardButtonDto
-import honey.bot.api.network.models.SendMessageResponse
+import honey.bot.api.network.models.request.KeyboardButtonDto
+import honey.bot.api.network.models.response.SendMessageResponse
 import java.io.File
 
-internal interface MessagesService : ApiService {
+interface MessagesService : ApiService {
 
     @Post("messages/sendText/")
     fun sendText(
@@ -22,11 +23,12 @@ internal interface MessagesService : ApiService {
         @Param("inline_keyboard") inlineKeyboard: List<KeyboardButtonDto>?,
     ): SendMessageResponse
 
+    @Multipart
     @Post("messages/sendFile/")
     fun sendFile(
+        @Param("document") document: File,
         @Param("login") login: String?,
         @Param("chat_id") chatId: String?,
-        @Param("document") document: File,
         @Param("thread_id") threadId: Long?,
     ): SendMessageResponse
 }

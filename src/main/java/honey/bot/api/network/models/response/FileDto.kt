@@ -1,4 +1,4 @@
-package honey.bot.api.network.models
+package honey.bot.api.network.models.response
 
 data class FileDto(
     val id: String,

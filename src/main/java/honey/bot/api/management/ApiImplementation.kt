@@ -1,11 +1,14 @@
 package honey.bot.api.management
 
 import com.google.gson.Gson
+import com.google.gson.JsonObject
 import honey.bot.api.network.annotations.Get
+import honey.bot.api.network.annotations.Multipart
 import honey.bot.api.network.annotations.Param
 import honey.bot.api.network.annotations.Post
 import honey.bot.api.network.services.ApiService
 import okhttp3.HttpUrl.Companion.toHttpUrl
+import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.MultipartBody
 import okhttp3.Request
 import okhttp3.RequestBody.Companion.toRequestBody
@@ -42,7 +45,11 @@ internal class ApiImplementation(
         }
         val postAnnotation = method.getAnnotation(Post::class.java)
         if (postAnnotation != null) {
-            return createPostRequest(postAnnotation.endpoint, queries)
+            return createPostRequest(
+                postAnnotation.endpoint,
+                queries,
+                isMultipart = method.getAnnotation(Multipart::class.java) != null
+            )
         }
         throw IllegalStateException("Method $method should be annotated by REST METHOD annotation")
     }
@@ -58,24 +65,57 @@ internal class ApiImplementation(
             .build()
     }
 
-    private fun createPostRequest(path: String, queries: List<QueryEntity>): Request {
+    private fun createPostRequest(path: String, queries: List<QueryEntity>, isMultipart: Boolean): Request {
         val urlBuilder = baseUrl.toHttpUrl()
             .newBuilder()
             .addPathSegment(path)
-        val builder = MultipartBody.Builder().setType(MultipartBody.FORM)
+
+        val multipartBodyBuilder = MultipartBody.Builder().setType(MultipartBody.FORM)
+        val jsonObject = JsonObject()
+
         queries.forEach { query ->
-            if (query.value is File) {
-                val requestBody = Files.readAllBytes(query.value.toPath()).toRequestBody(null)
-                builder.addFormDataPart(query.key, query.value.name, requestBody)
-            } else {
-                builder.addFormDataPart(query.key, query.value.toString())
+            when (query.value) {
+                is File -> {
+                    val requestBody = Files.readAllBytes(query.value.toPath()).toRequestBody()
+                    multipartBodyBuilder.addFormDataPart(query.key, query.value.name, requestBody)
+                }
+                is List<*> -> {
+                    if (isMultipart) {
+                        multipartBodyBuilder.addPart(query.valueAsJson.toMultipartBodyPart("${query.key}[]"))
+                    } else {
+                        jsonObject.addProperty(query.key, query.valueAsJson)
+                    }
+                }
+                else -> {
+                    if (isMultipart) {
+                        multipartBodyBuilder.addFormDataPart(query.key, query.value.toString())
+                    } else {
+                        jsonObject.addProperty(query.key, query.value.toString())
+                    }
+                }
             }
         }
+
+        val requestBody = if (isMultipart) {
+            multipartBodyBuilder.build()
+        } else {
+            val formattedJson = jsonObject.toString()
+                .replace("\\", "")
+                .replace("\"[", "[")
+                .replace("]\"", "]")
+            val mediaType = "application/json; charset=utf-8".toMediaType()
+            formattedJson.toRequestBody(mediaType)
+        }
+
         return Request.Builder()
             .url(urlBuilder.build())
-            .post(builder.build())
+            .post(requestBody)
             .addHeader("Authorization", "OAuth $token")
             .build()
+    }
+
+    private fun String.toMultipartBodyPart(partName: String): MultipartBody.Part {
+        return MultipartBody.Part.createFormData(partName, this)
     }
 }
 

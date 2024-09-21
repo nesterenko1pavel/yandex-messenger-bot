@@ -1,4 +1,4 @@
-package honey.bot.api.network.models
+package honey.bot.api.network.models.request
 
 import com.google.gson.annotations.SerializedName
 

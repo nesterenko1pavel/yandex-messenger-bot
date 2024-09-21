@@ -2,9 +2,9 @@ package honey.bot.api.network.services
 
 import honey.bot.api.network.annotations.Get
 import honey.bot.api.network.annotations.Param
-import honey.bot.api.network.models.GeneralUpdateResponse
+import honey.bot.api.network.models.response.GeneralUpdateResponse
 
-internal interface PollingService : ApiService {
+interface PollingService : ApiService {
 
     @Get("messages/getUpdates/")
     fun getUpdates(

@@ -5,6 +5,34 @@
 ### A few words
 Hi! It's indie project for supporting Yandex Messenger API in kotlin. Glad to see you in my pet project. Hope this library will save your time and make your activity in messenger more convenient
 
+### Yandex Messenger API
+[API Documentation](https://yandex.ru/dev/messenger/doc/ru/)
+
+|    polling method    |  Status   |
+|:--------------------:|:---------:|
+| messages/getUpdates/ | supported |
+
+|    messages method    |    Status     |
+|:---------------------:|:-------------:|
+|  messages/sendText/   |   supported   |
+|  messages/sendFile/   |   supported   |
+|   messages/getFile/   | not supported |
+|  messages/sendImage/  | not supported |
+| messages/sendGallery/ | not supported |
+|   messages/delete/    | not supported |
+
+|     chats method     |    Status     |
+|:--------------------:|:-------------:|
+|    chats/create/     |   supported   |
+| chats/updateMembers/ |   supported   |
+|  users/getUserLink/  | not supported |
+
+|     polls method     |    Status     |
+|:--------------------:|:-------------:|
+| messages/createPoll/ | not supported |
+|  polls/getResults/   | not supported |
+|   polls/getVoters/   | not supported |
+
 ### Implementation
 
 ```kotlin
