@@ -9,6 +9,7 @@ import java.io.File
 
 interface MessagesService : ApiService {
 
+    @Multipart // FIXME: hack for saving [text] formatting
     @Post("messages/sendText/")
     fun sendText(
         @Param("text") text: String,
