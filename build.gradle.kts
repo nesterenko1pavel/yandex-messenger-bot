@@ -27,7 +27,7 @@ publishing {
         create<MavenPublication>("maven") {
             groupId = "com.github.nesterenko1pavel"
             artifactId = "yandex-messenger-bot"
-            version = "1.0.16"
+            version = "1.0.17"
 
             from(components["java"])
         }

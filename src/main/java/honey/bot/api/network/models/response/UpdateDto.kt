@@ -12,5 +12,5 @@ data class UpdateDto(
     @SerializedName("update_id")
     val updateId: Long,
     val file: FileDto?,
-    val images: List<ImageDto>?,
+    val images: List<List<ImageDto>?>?,
 )
