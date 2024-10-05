@@ -7,9 +7,7 @@ import honey.bot.api.management.BotApiClient
 import honey.bot.api.management.FibonacciExecutor
 import honey.bot.api.management.RequestExecutor
 import honey.bot.api.network.models.response.UpdateDto
-import honey.bot.api.network.services.ChatsService
-import honey.bot.api.network.services.MessagesService
-import honey.bot.api.network.services.PollingService
+import honey.bot.api.network.services.*
 import okhttp3.OkHttpClient
 import java.util.concurrent.ConcurrentLinkedQueue
 import java.util.concurrent.TimeUnit
@@ -41,6 +39,8 @@ class BotController(
             apiImplementation.createImplementation<PollingService>(),
             apiImplementation.createImplementation<MessagesService>(),
             apiImplementation.createImplementation<ChatsService>(),
+            apiImplementation.createImplementation<UserService>(),
+            apiImplementation.createImplementation<PollService>(),
         )
     }
 

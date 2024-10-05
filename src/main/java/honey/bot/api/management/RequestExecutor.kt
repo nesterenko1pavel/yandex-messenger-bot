@@ -17,10 +17,14 @@ internal class RequestExecutor(
         httpClient.newCall(request)
             .execute()
             .use { response ->
-                val body = response.body ?: throw IllegalStateException("ResponseBody is null")
-                val bodyString = body.string()
-                if (!response.isSuccessful) throw IOException("HTTP Error ${response.code} $bodyString}")
-                return gson.fromJson(bodyString, returnType)
+                return if (returnType == ByteArray::class.java) {
+                    response.body?.bytes() as T
+                } else {
+                    val body = response.body ?: throw IllegalStateException("ResponseBody is null")
+                    val bodyString = body.string()
+                    if (!response.isSuccessful) throw IOException("HTTP Error ${response.code} $bodyString}")
+                    gson.fromJson(bodyString, returnType)
+                }
             }
     }
 }
