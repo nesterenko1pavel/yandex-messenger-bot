@@ -100,7 +100,7 @@ internal class ApiImplementation(
             multipartBodyBuilder.build()
         } else {
             val formattedJson = jsonObject.toString()
-                .replace("\\", "")
+                .replace("\\\"", "\"")
                 .replace("\"[", "[")
                 .replace("]\"", "]")
             val mediaType = "application/json; charset=utf-8".toMediaType()
